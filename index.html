@@ -14,7 +14,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; worker-src 'self'; style-src 'unsafe-inline'; connect-src https://api.frankfurter.dev; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src 'none';">
 <title>PRICE CHECK</title>
 <style>
-:root{--bg:#f7f4ef;--card:#fff;--ink:#262521;--muted:#817d74;--line:#FCF4F4;--accent:#BA9093;--accent-soft:#FCF4F4;--coral:#c8755c;--shadow:0 8px 28px rgba(54,45,32,.06)}
+:root{--bg:#f7f4ef;--card:#fff;--ink:#262521;--muted:#817d74;--line:#e9e4dc;--accent:#BA9093;--accent-soft:#FCF4F4;--coral:#A65F68;--shadow:0 8px 28px rgba(54,45,32,.06)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;font-size:15px}
 main{max-width:520px;margin:0 auto;padding:24px 17px 42px}
 header{display:flex;justify-content:space-between;align-items:flex-start;margin:5px 2px 20px}
@@ -40,12 +40,14 @@ summary:after{content:"＋";float:right;font-size:16px}details[open] summary:aft
 .optional-grid .field{margin-bottom:0}.optional-grid input{font-size:15px;padding:11px 7px}
 .discount-row{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:7px;align-items:end}
 .discount-row select{width:100%;padding:11px 7px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:13px}
-.compare{background:var(--accent);color:white;border-radius:18px;padding:19px;margin:14px 0;box-shadow:var(--shadow)}
-.compare .card-title{color:#e3eee6;margin-bottom:15px}
-.result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.2)}
-.result-row:last-of-type{border:0}.result-row span{font-size:13px;color:#e0e9e2}.result-row strong{font-size:19px}
-.verdict{background:rgba(255,255,255,.14);border-radius:12px;padding:13px;margin-top:14px}
-.verdict b{display:block;font-size:17px;margin-bottom:4px}.verdict small{color:#e0e9e2;font-size:12px}
+.compare{background:#F7EEEE;color:#493B3D;border:1px solid #EAD9DA;border-radius:18px;padding:19px;margin:14px 0;box-shadow:var(--shadow)}
+.compare .card-title{color:#805D62;margin-bottom:15px}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #EAD9DA}
+.result-row:last-of-type{border:0}.result-row span{font-size:13px;font-weight:700}.result-row strong{font-size:19px;color:#493B3D}
+.result-row .kr-label{color:#A46670}.result-row .jp-label{color:#657D91}
+.verdict{background:#FFFFFF;border:1px solid #EAD9DA;border-radius:12px;padding:13px;margin-top:14px}
+.verdict b{display:block;font-size:17px;margin-bottom:4px;color:#805D62}.verdict small{color:#75666A;font-size:12px}
+.kr-section-title{color:#A46670}.jp-section-title{color:#657D91}
 .note{font-size:10px;color:var(--muted);line-height:1.7;margin:13px 3px}.error{color:var(--coral)}
 @media(min-width:520px){main{padding-top:32px}}
 </style>
@@ -62,13 +64,13 @@ summary:after{content:"＋";float:right;font-size:16px}details[open] summary:aft
 </section>
 
 <section class="card">
- <div class="card-title">🇰🇷 韓国で購入</div>
+ <div class="card-title kr-section-title">🇰🇷 韓国で購入</div>
  <div class="field"><label for="krw">韓国の販売価格</label><div class="input-wrap"><span class="prefix">₩</span><input id="krw" type="number" inputmode="numeric" min="0" placeholder="例：85000"></div><div class="converted"><span>日本円換算（割引・追加費用反映後）</span><strong id="krwYen">— 円</strong></div></div>
- <details><summary>詳細項目 ※任意（割引率・追加費用など）</summary>
+ <details><summary>詳細項目（セール・追加費用など）</summary>
   <div class="field"><label>韓国の割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="krDiscountPrefix">₩</span><input id="krDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="krDiscountType" aria-label="韓国の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
   <div class="field"><label for="krExtra">韓国の追加費用（KRW）</label><div class="input-wrap"><span class="prefix">₩</span><input id="krExtra" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
   <div class="field">
-   <label>カード決済手数料</label>
+   <label>カード決済手数料（任意）</label>
    <div class="discount-row">
     <div class="input-wrap"><span class="prefix" id="krFeePrefix">%</span><input id="krFee" type="number" inputmode="decimal" min="0" placeholder="例：1.6"></div>
     <select id="krFeeType" aria-label="カード決済手数料の入力方式"><option value="percent">％で入力</option><option value="amount">金額（KRW）</option></select>
@@ -79,18 +81,18 @@ summary:after{content:"＋";float:right;font-size:16px}details[open] summary:aft
 </section>
 
 <section class="card">
- <div class="card-title">🇯🇵 日本でオンライン購入</div>
- <div class="field"><label for="jpPrice">オンラインの販売価格</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpPrice" type="number" inputmode="numeric" min="0" placeholder="例：10500"></div></div>
- <div class="field"><label for="jpShipping">オンライン購入時の送料（任意）</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpShipping" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
- <details><summary>詳細項目 ※任意（クーポンなど）</summary>
-  <div class="field"><label>オンラインの割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="jpDiscountPrefix">¥</span><input id="jpDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="jpDiscountType" aria-label="日本の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
+ <div class="card-title jp-section-title">🇯🇵 日本でオンライン購入</div>
+ <div class="field"><label for="jpPrice">日本の販売価格</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpPrice" type="number" inputmode="numeric" min="0" placeholder="例：10500"></div></div>
+ <div class="field"><label for="jpShipping">日本の送料（任意）</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpShipping" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+ <details><summary>詳細項目（クーポンなど）</summary>
+  <div class="field"><label>日本の割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="jpDiscountPrefix">¥</span><input id="jpDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="jpDiscountType" aria-label="日本の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
  </details>
 </section>
 
 <section class="compare">
  <div class="card-title"><span>PRICE COMPARISON</span><span>比較結果</span></div>
- <div class="result-row"><span>🇰🇷 韓国で購入</span><strong id="resultKr">—</strong></div>
- <div class="result-row"><span>🇯🇵 オンラインで購入</span><strong id="resultJp">—</strong></div>
+ <div class="result-row"><span class="kr-label">🇰🇷 韓国で購入</span><strong id="resultKr">—</strong></div>
+ <div class="result-row"><span class="jp-label">🇯🇵 日本で購入</span><strong id="resultJp">—</strong></div>
  <div class="verdict" id="verdict"><b id="verdictTitle">価格を入力してください</b><small id="verdictDetail">入力すると自動で比較します。</small></div>
 </section>
 <p class="note">※為替レートは参考値です。実際のカード・両替サービスの適用レート、税金、免税条件等によって支払額は異なります。カード決済手数料が分かる場合は、韓国側の詳細項目に％またはKRW金額で入力できます。自動レート取得時はFrankfurter APIに接続します。API提供元には通信元IPアドレス等の接続情報が伝わる場合があります。商品価格などの入力値は外部送信しません。手動レートはこの端末のブラウザ内に保存されます。</p>
@@ -208,7 +210,11 @@ fetchRate();
 </script>
 <script>
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+      .then(registration => registration.update())
+      .catch(() => {});
+  });
 }
 </script>
 </body>
