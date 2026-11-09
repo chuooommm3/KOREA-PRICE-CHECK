@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e8b4b8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PRICE CHECK">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=()">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; worker-src 'self'; style-src 'unsafe-inline'; connect-src https://api.frankfurter.dev; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; frame-src 'none';">
+<title>PRICE CHECK</title>
+<style>
+:root{--bg:#f7f4ef;--card:#fff;--ink:#262521;--muted:#817d74;--line:#FCF4F4;--accent:#BA9093;--accent-soft:#FCF4F4;--coral:#c8755c;--shadow:0 8px 28px rgba(54,45,32,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;font-size:15px}
+main{max-width:520px;margin:0 auto;padding:24px 17px 42px}
+header{display:flex;justify-content:space-between;align-items:flex-start;margin:5px 2px 20px}
+.eyebrow{font-size:10px;letter-spacing:.18em;color:var(--accent);font-weight:800}
+h1{font-size:24px;letter-spacing:.03em;margin:5px 0 3px}.subtitle{font-size:12px;color:var(--muted)}
+.badge{font-size:10px;background:#eee9df;padding:7px 9px;border-radius:20px;color:#625d53}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:12px 0;box-shadow:var(--shadow)}
+.card-title{font-size:13px;font-weight:750;margin:0 0 13px;display:flex;justify-content:space-between;align-items:center}
+.rate-row{display:flex;gap:9px;align-items:center}.rate-value{font-size:22px;font-weight:750;white-space:nowrap}.rate-unit{font-size:11px;color:var(--muted)}
+button,select{font:inherit;border:0;cursor:pointer}.small-btn{background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:9px 11px;font-size:12px;font-weight:700}
+.rate-tools{display:flex;gap:8px;align-items:center;margin-top:13px;flex-wrap:wrap}.status{font-size:11px;color:var(--muted);flex:1}
+.field{margin:12px 0}label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+.input-wrap{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;padding:0 12px}
+.prefix{font-size:15px;color:var(--muted);font-weight:650}
+input{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:13px 8px;font-size:18px;color:var(--ink);font-family:inherit}
+input::placeholder{color:#c5c0b7}
+.converted{display:flex;justify-content:space-between;align-items:center;background:#f7f8f5;border-radius:11px;padding:11px 12px;margin-top:9px}
+.converted span{font-size:11px;color:var(--muted)}.converted strong{font-size:17px}
+details{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+summary{font-size:12px;font-weight:700;color:var(--accent);cursor:pointer;list-style:none}
+summary:after{content:"＋";float:right;font-size:16px}details[open] summary:after{content:"−"}
+.optional-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.optional-grid .field{margin-bottom:0}.optional-grid input{font-size:15px;padding:11px 7px}
+.discount-row{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:7px;align-items:end}
+.discount-row select{width:100%;padding:11px 7px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:13px}
+.compare{background:var(--accent);color:white;border-radius:18px;padding:19px;margin:14px 0;box-shadow:var(--shadow)}
+.compare .card-title{color:#e3eee6;margin-bottom:15px}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.2)}
+.result-row:last-of-type{border:0}.result-row span{font-size:13px;color:#e0e9e2}.result-row strong{font-size:19px}
+.verdict{background:rgba(255,255,255,.14);border-radius:12px;padding:13px;margin-top:14px}
+.verdict b{display:block;font-size:17px;margin-bottom:4px}.verdict small{color:#e0e9e2;font-size:12px}
+.note{font-size:10px;color:var(--muted);line-height:1.7;margin:13px 3px}.error{color:var(--coral)}
+@media(min-width:520px){main{padding-top:32px}}
+</style>
+</head>
+<body>
+<main>
+<header><div><div class="eyebrow">KOREA SHOPPING TOOL</div><h1>KOREA PRICE CHECK</h1><div class="subtitle">韓国と日本、どちらで買うのがお得？</div></div><div class="badge">KRW ⇄ JPY</div></header>
+
+<section class="card">
+ <div class="card-title"><span>為替レート</span><span class="rate-unit">100 KRW あたり</span></div>
+ <div class="rate-row"><div><div class="rate-value" id="rateDisplay">— 円</div><div class="rate-unit" id="rateMode">レートを取得してください</div></div><button class="small-btn" id="refresh" type="button">自動取得 ↻</button></div>
+ <div class="rate-tools"><span class="status" id="rateStatus">自動取得レートを読み込みます</span><button class="small-btn" id="editRate" type="button">手動で変更</button></div>
+ <div class="field" id="manualBox" hidden><label for="rateInput">100 KRW = 何円？（手数料込みの実質レートも設定可）</label><div class="input-wrap"><input id="rateInput" type="number" inputmode="decimal" step="0.0001" min="0" placeholder="例：11.00"><span class="prefix">円</span></div><div class="rate-tools"><button class="small-btn" id="saveRate" type="button">このレートを使う</button><button class="small-btn" id="useAuto" type="button">自動レートに戻す</button></div></div>
+</section>
+
+<section class="card">
+ <div class="card-title">🇰🇷 韓国で購入</div>
+ <div class="field"><label for="krw">韓国の販売価格</label><div class="input-wrap"><span class="prefix">₩</span><input id="krw" type="number" inputmode="numeric" min="0" placeholder="例：85000"></div><div class="converted"><span>日本円換算（割引・追加費用反映後）</span><strong id="krwYen">— 円</strong></div></div>
+ <details><summary>詳細項目 ※任意（割引率・追加費用など）</summary>
+  <div class="field"><label>韓国の割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="krDiscountPrefix">₩</span><input id="krDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="krDiscountType" aria-label="韓国の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
+  <div class="field"><label for="krExtra">韓国の追加費用（KRW）</label><div class="input-wrap"><span class="prefix">₩</span><input id="krExtra" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+  <div class="field">
+   <label>カード決済手数料</label>
+   <div class="discount-row">
+    <div class="input-wrap"><span class="prefix" id="krFeePrefix">%</span><input id="krFee" type="number" inputmode="decimal" min="0" placeholder="例：1.6"></div>
+    <select id="krFeeType" aria-label="カード決済手数料の入力方式"><option value="percent">％で入力</option><option value="amount">金額（KRW）</option></select>
+   </div>
+   <div class="rate-unit" style="margin-top:6px">％の場合は割引後の価格＋追加費用に対して計算します。</div>
+  </div>
+ </details>
+</section>
+
+<section class="card">
+ <div class="card-title">🇯🇵 日本でオンライン購入</div>
+ <div class="field"><label for="jpPrice">オンラインの販売価格</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpPrice" type="number" inputmode="numeric" min="0" placeholder="例：10500"></div></div>
+ <div class="field"><label for="jpShipping">オンライン購入時の送料（任意）</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpShipping" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+ <details><summary>詳細項目 ※任意（クーポンなど）</summary>
+  <div class="field"><label>オンラインの割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="jpDiscountPrefix">¥</span><input id="jpDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="jpDiscountType" aria-label="日本の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
+ </details>
+</section>
+
+<section class="compare">
+ <div class="card-title"><span>PRICE COMPARISON</span><span>比較結果</span></div>
+ <div class="result-row"><span>🇰🇷 韓国で購入</span><strong id="resultKr">—</strong></div>
+ <div class="result-row"><span>🇯🇵 オンラインで購入</span><strong id="resultJp">—</strong></div>
+ <div class="verdict" id="verdict"><b id="verdictTitle">価格を入力してください</b><small id="verdictDetail">入力すると自動で比較します。</small></div>
+</section>
+<p class="note">※為替レートは参考値です。実際のカード・両替サービスの適用レート、税金、免税条件等によって支払額は異なります。カード決済手数料が分かる場合は、韓国側の詳細項目に％またはKRW金額で入力できます。自動レート取得時はFrankfurter APIに接続します。API提供元には通信元IPアドレス等の接続情報が伝わる場合があります。商品価格などの入力値は外部送信しません。手動レートはこの端末のブラウザ内に保存されます。</p>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const ids = ['krw','krDiscount','krExtra','krDiscountType','krFee','krFeeType','jpPrice','jpShipping','jpDiscount','jpDiscountType'];
+let autoRate = null, activeRate = null, manual = false;
+const yen = n => Number.isFinite(n) ? Math.round(n).toLocaleString('ja-JP') + '円' : '—';
+const val = id => Math.max(0, Number($(id).value) || 0);
+function discount(base, inputId, typeId) {
+  const entered = val(inputId);
+  return $(typeId).value === 'percent'
+    ? Math.min(base, base * Math.min(100, entered) / 100)
+    : Math.min(base, entered);
+}
+function setText(id, value) { $(id).textContent = value; }
+function render() {
+  setText('rateDisplay', activeRate ? Number(activeRate).toFixed(4) + ' 円' : '— 円');
+  setText('rateMode', manual ? '手動設定レート' : '自動取得レート（参考値）');
+  const krBase = val('krw');
+  const krDiscount = discount(krBase, 'krDiscount', 'krDiscountType');
+  const krSubtotal = Math.max(0, krBase - krDiscount) + val('krExtra');
+  const feeInput = val('krFee');
+  const krFee = $('krFeeType').value === 'percent'
+    ? krSubtotal * Math.min(100, feeInput) / 100
+    : feeInput;
+  const krNet = krSubtotal + krFee;
+  const krYen = activeRate ? krNet * activeRate / 100 : null;
+  const jpBase = val('jpPrice');
+  const jpDiscount = discount(jpBase, 'jpDiscount', 'jpDiscountType');
+  const jpNet = Math.max(0, jpBase - jpDiscount) + val('jpShipping');
+  setText('krwYen', krYen === null ? '— 円' : yen(krYen));
+  setText('resultKr', krYen === null ? '—' : yen(krYen));
+  setText('resultJp', jpBase ? yen(jpNet) : '—');
+  const title = $('verdictTitle'), detail = $('verdictDetail');
+  if (!krBase || !jpBase || krYen === null) {
+    title.textContent = '価格を入力してください';
+    detail.textContent = '韓国価格・日本価格・為替レートがそろうと比較できます。';
+    return;
+  }
+  const diff = Math.abs(jpNet - krYen), pct = jpNet > 0 ? diff / jpNet * 100 : 0;
+  if (diff < 1) {
+    title.textContent = 'ほぼ同じ価格！'; detail.textContent = '価格差はほとんどありません。';
+  } else if (krYen < jpNet) {
+    title.textContent = '🇰🇷 韓国で買う方がお得！';
+    detail.textContent = `日本で買うより ${yen(diff)}（約${pct.toFixed(1)}%）安い`;
+  } else {
+    title.textContent = '🇯🇵 日本で買う方がお得！';
+    detail.textContent = `韓国で買うより ${yen(diff)}（約${(jpNet > 0 ? diff / jpNet * 100 : 0).toFixed(1)}%）安い`;
+  }
+}
+function updateDiscountUnits() {
+  setText('krDiscountPrefix', $('krDiscountType').value === 'percent' ? '%' : '₩');
+  setText('jpDiscountPrefix', $('jpDiscountType').value === 'percent' ? '%' : '¥');
+  setText('krFeePrefix', $('krFeeType').value === 'percent' ? '%' : '₩');
+  $('krFee').placeholder = $('krFeeType').value === 'percent' ? '例：1.6' : '0';
+  $('krDiscount').placeholder = $('krDiscountType').value === 'percent' ? '例：10' : '0';
+  $('jpDiscount').placeholder = $('jpDiscountType').value === 'percent' ? '例：10' : '0';
+  render();
+}
+async function fetchRate() {
+  setText('rateStatus', '為替レートを取得中…'); $('rateStatus').classList.remove('error');
+  try {
+    const response = await fetch('https://api.frankfurter.dev/v1/latest?base=KRW&symbols=JPY', {
+      method: 'GET', mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer'
+    });
+    if (!response.ok) throw new Error('HTTP error');
+    const data = await response.json();
+    const per100 = Number(data.rates && data.rates.JPY) * 100;
+    if (!Number.isFinite(per100) || per100 <= 0) throw new Error('Invalid rate');
+    autoRate = per100;
+    if (!manual) { activeRate = autoRate; render(); $('rateInput').value = autoRate.toFixed(4); }
+    setText('rateStatus', `自動取得：${data.date} 時点`);
+  } catch (_) {
+    setText('rateStatus', '自動取得できません。通信環境を確認するか、手動で入力してください。');
+    $('rateStatus').classList.add('error');
+  }
+}
+ids.forEach(id => $(id).addEventListener('input', render));
+$('krDiscountType').addEventListener('change', updateDiscountUnits);
+$('jpDiscountType').addEventListener('change', updateDiscountUnits);
+$('krFeeType').addEventListener('change', updateDiscountUnits);
+$('refresh').addEventListener('click', fetchRate);
+$('editRate').addEventListener('click', () => {
+  $('manualBox').hidden = !$('manualBox').hidden;
+  if (activeRate) $('rateInput').value = Number(activeRate).toFixed(4);
+});
+$('saveRate').addEventListener('click', () => {
+  const rate = Number($('rateInput').value);
+  if (Number.isFinite(rate) && rate > 0 && rate < 1000) {
+    activeRate = rate; manual = true;
+    try { localStorage.setItem('kpc_manual_rate', String(rate)); } catch (_) {}
+    setText('rateStatus', '手動設定レートを保存しました'); render();
+  } else {
+    setText('rateStatus', '0より大きい有効なレートを入力してください。');
+  }
+});
+$('useAuto').addEventListener('click', () => {
+  manual = false;
+  try { localStorage.removeItem('kpc_manual_rate'); } catch (_) {}
+  if (autoRate) { activeRate = autoRate; setText('rateStatus', '自動取得レートに戻しました'); render(); }
+  else fetchRate();
+});
+try {
+  const saved = Number(localStorage.getItem('kpc_manual_rate'));
+  if (Number.isFinite(saved) && saved > 0 && saved < 1000) {
+    manual = true; activeRate = saved; $('rateInput').value = saved.toFixed(4);
+    setText('rateStatus', '保存済みの手動レートを使用中');
+  }
+} catch (_) {}
+updateDiscountUnits();
+fetchRate();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
