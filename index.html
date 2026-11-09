@@ -64,11 +64,11 @@ summary:after{content:"＋";float:right;font-size:16px}details[open] summary:aft
 <section class="card">
  <div class="card-title">🇰🇷 韓国で購入</div>
  <div class="field"><label for="krw">韓国の販売価格</label><div class="input-wrap"><span class="prefix">₩</span><input id="krw" type="number" inputmode="numeric" min="0" placeholder="例：85000"></div><div class="converted"><span>日本円換算（割引・追加費用反映後）</span><strong id="krwYen">— 円</strong></div></div>
- <details><summary>詳細項目（セール・追加費用など）</summary>
+ <details><summary>詳細項目 ※任意（割引率・追加費用など）</summary>
   <div class="field"><label>韓国の割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="krDiscountPrefix">₩</span><input id="krDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="krDiscountType" aria-label="韓国の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
   <div class="field"><label for="krExtra">韓国の追加費用（KRW）</label><div class="input-wrap"><span class="prefix">₩</span><input id="krExtra" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
   <div class="field">
-   <label>カード決済手数料（任意）</label>
+   <label>カード決済手数料</label>
    <div class="discount-row">
     <div class="input-wrap"><span class="prefix" id="krFeePrefix">%</span><input id="krFee" type="number" inputmode="decimal" min="0" placeholder="例：1.6"></div>
     <select id="krFeeType" aria-label="カード決済手数料の入力方式"><option value="percent">％で入力</option><option value="amount">金額（KRW）</option></select>
@@ -80,17 +80,17 @@ summary:after{content:"＋";float:right;font-size:16px}details[open] summary:aft
 
 <section class="card">
  <div class="card-title">🇯🇵 日本でオンライン購入</div>
- <div class="field"><label for="jpPrice">日本の販売価格</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpPrice" type="number" inputmode="numeric" min="0" placeholder="例：10500"></div></div>
- <div class="field"><label for="jpShipping">日本の送料（任意）</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpShipping" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
- <details><summary>詳細項目（クーポンなど）</summary>
-  <div class="field"><label>日本の割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="jpDiscountPrefix">¥</span><input id="jpDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="jpDiscountType" aria-label="日本の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
+ <div class="field"><label for="jpPrice">オンラインの販売価格</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpPrice" type="number" inputmode="numeric" min="0" placeholder="例：10500"></div></div>
+ <div class="field"><label for="jpShipping">オンライン購入時の送料（任意）</label><div class="input-wrap"><span class="prefix">¥</span><input id="jpShipping" type="number" inputmode="numeric" min="0" placeholder="0"></div></div>
+ <details><summary>詳細項目 ※任意（クーポンなど）</summary>
+  <div class="field"><label>オンラインの割引</label><div class="discount-row"><div class="input-wrap"><span class="prefix" id="jpDiscountPrefix">¥</span><input id="jpDiscount" type="number" inputmode="decimal" min="0" placeholder="0"></div><select id="jpDiscountType" aria-label="日本の割引方式"><option value="amount">金額割引</option><option value="percent">％割引</option></select></div></div>
  </details>
 </section>
 
 <section class="compare">
  <div class="card-title"><span>PRICE COMPARISON</span><span>比較結果</span></div>
  <div class="result-row"><span>🇰🇷 韓国で購入</span><strong id="resultKr">—</strong></div>
- <div class="result-row"><span>🇯🇵 日本で購入</span><strong id="resultJp">—</strong></div>
+ <div class="result-row"><span>🇯🇵 オンラインで購入</span><strong id="resultJp">—</strong></div>
  <div class="verdict" id="verdict"><b id="verdictTitle">価格を入力してください</b><small id="verdictDetail">入力すると自動で比較します。</small></div>
 </section>
 <p class="note">※為替レートは参考値です。実際のカード・両替サービスの適用レート、税金、免税条件等によって支払額は異なります。カード決済手数料が分かる場合は、韓国側の詳細項目に％またはKRW金額で入力できます。自動レート取得時はFrankfurter APIに接続します。API提供元には通信元IPアドレス等の接続情報が伝わる場合があります。商品価格などの入力値は外部送信しません。手動レートはこの端末のブラウザ内に保存されます。</p>
